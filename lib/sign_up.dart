@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sign_up/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'constants.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -214,7 +215,7 @@ class _SignUpState extends State<SignUp> {
             image: DecorationImage(
                 image: AssetImage('assets/bg.png'), fit: BoxFit.cover)),
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: const Color.fromARGB(34, 136, 136, 136),
           body: SizedBox(
             width: size.width,
             height: size.height,
@@ -229,9 +230,10 @@ class _SignUpState extends State<SignUp> {
                         "Sign Up",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 45,
-                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w700,
                           letterSpacing: 5,
                         ),
                       ),
@@ -243,7 +245,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _firstNamHintText,
                       isRequired: true,
-                      icon: const Icon(Icons.person),
+                      icon: Icons.person_outline_rounded,
                       thisFocusNode: _focusFirstName,
                       requestNextFocus: _focusLastName,
                       autoFocus: true,
@@ -255,7 +257,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _lastNamHintText,
                       isRequired: true,
-                      icon: const Icon(Icons.person_outline_rounded),
+                      icon: Icons.person,
                       thisFocusNode: _focusLastName,
                       requestNextFocus: _focusDatePicker,
                     ),
@@ -270,16 +272,22 @@ class _SignUpState extends State<SignUp> {
                         lastDate: DateTime(2023),
                         dateLabelText: "Birth date",
                         textAlign: TextAlign.start,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17.5,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 3),
                         onFieldSubmitted: (value) {
                           FocusScope.of(context)
                               .requestFocus(_focusStreetAddress1);
                         },
                         decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.date_range_outlined),
+                            prefixIcon: const Icon(Icons.date_range_outlined,
+                                color: Colors.black, size: 35),
                             helperText: "Required*",
                             helperStyle: _isValidDate
-                                ? TextStyle(color: Colors.green[700])
-                                : const TextStyle(color: Colors.red)),
+                                ? kRequiredValidHintStyle
+                                : kRequiredNotValidHintStyle),
                         onChanged: (val) => {
                           _selectedDate = val,
                           if (val.isNotEmpty && val != "")
@@ -296,7 +304,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _firstStreetAddresHintText,
                       isRequired: true,
-                      icon: const Icon(Icons.house_outlined),
+                      icon: Icons.house_outlined,
                       thisFocusNode: _focusStreetAddress1,
                       requestNextFocus: _focusStreetAddress2,
                     ),
@@ -307,7 +315,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _secondStreetAddresHintText,
                       isRequired: false,
-                      icon: const Icon(Icons.house_rounded),
+                      icon: Icons.house_rounded,
                       thisFocusNode: _focusStreetAddress2,
                       requestNextFocus: _focusCity,
                     ),
@@ -318,7 +326,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _cityHintText,
                       isRequired: true,
-                      icon: const Icon(Icons.location_city_outlined),
+                      icon: Icons.location_city_outlined,
                       thisFocusNode: _focusCity,
                       requestNextFocus: _focusState,
                     ),
@@ -329,7 +337,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _stateHintText,
                       isRequired: true,
-                      icon: const Icon(Icons.location_on_outlined),
+                      icon: Icons.location_on_outlined,
                       thisFocusNode: _focusState,
                       requestNextFocus: _focusZip,
                     ),
@@ -340,7 +348,7 @@ class _SignUpState extends State<SignUp> {
                       obscureText: false,
                       hintText: _zipHintText,
                       isRequired: true,
-                      icon: const Icon(Icons.local_post_office_outlined),
+                      icon: Icons.local_post_office_outlined,
                       textInputDone: true,
                       thisFocusNode: _focusZip,
                       requestNextFocus: _focusScreen,
@@ -351,24 +359,26 @@ class _SignUpState extends State<SignUp> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: size.width / 5),
                       child: SizedBox(
-                        height: 50,
+                        height: 55,
                         width: double.infinity,
                         child: ElevatedButton(
-                            onPressed: () {
-                              _changeValidationStateIfInputIsEmpty();
+                          onPressed: () {
+                            _changeValidationStateIfInputIsEmpty();
 
-                              if (_isFormValid()) {
-                                _addUser();
-                                _clearTextFieldsAndResetValidation();
-                              } else {
-                                _redirectScopeIfFieldIsInvalidOnSubmission();
-                              }
-                            },
-                            child: const Text("Sign Up"),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.black))),
+                            if (_isFormValid()) {
+                              _addUser();
+                              _clearTextFieldsAndResetValidation();
+                            } else {
+                              _redirectScopeIfFieldIsInvalidOnSubmission();
+                            }
+                          },
+                          child: const Text("Sign Up"),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color.fromARGB(255, 0, 0, 0),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(

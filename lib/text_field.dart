@@ -21,7 +21,7 @@ class SignUpTextFields extends StatefulWidget {
   final bool obscureText;
   final String hintText;
   final bool isRequired;
-  final Icon icon;
+  final IconData icon;
   final bool textInputDone;
   final FocusNode thisFocusNode;
   final FocusNode? requestNextFocus;
@@ -32,8 +32,6 @@ class SignUpTextFields extends StatefulWidget {
 }
 
 class _SignUpTextFieldsState extends State<SignUpTextFields> {
-  // final kTextFieldStyle = const TextStyle(fontSize: 20, fontFamily: 'Roboto');
-
   bool _isFieldValid = false;
 
   @override
@@ -68,20 +66,30 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
         },
         focusNode: widget.thisFocusNode,
         autofocus: widget.autoFocus,
+        textAlignVertical: const TextAlignVertical(y: -0.25),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(0),
           hintText: widget.hintText,
+          fillColor: Colors.white,
+          hintStyle: const TextStyle(
+            color: Color.fromARGB(255, 196, 194, 194),
+            fontFamily: 'Montserrat',
+            fontSize: 20,
+            letterSpacing: 1,
+            fontWeight: FontWeight.w500,
+          ),
           helperText: widget.isRequired ? "Required*" : "(Optional)",
-          prefixIcon: widget.icon,
+          prefixIcon: Icon(
+            widget.icon,
+            color: const Color.fromARGB(255, 0, 0, 0),
+            size: 35,
+          ),
           prefixIconConstraints: const BoxConstraints(minWidth: 50),
           helperStyle: !widget.isRequired
-              ? const TextStyle(color: Colors.grey)
+              ? kNotRequiredHintStyle
               : _isFieldValid
-                  ? TextStyle(color: Colors.green[700])
-                  : const TextStyle(color: Colors.red),
-          labelStyle: kTextFieldStyle,
-          floatingLabelStyle:
-              const TextStyle(color: Colors.black, fontSize: 20),
+                  ? kRequiredValidHintStyle
+                  : kRequiredNotValidHintStyle,
         ),
       ),
     );
