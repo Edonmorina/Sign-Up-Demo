@@ -71,13 +71,7 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
           contentPadding: const EdgeInsets.all(0),
           hintText: widget.hintText,
           fillColor: Colors.white,
-          hintStyle: const TextStyle(
-            color: Color.fromARGB(255, 196, 194, 194),
-            fontFamily: 'Montserrat',
-            fontSize: 20,
-            letterSpacing: 1,
-            fontWeight: FontWeight.w500,
-          ),
+          hintStyle: kTextHintStyle,
           helperText: widget.isRequired ? "Required*" : "(Optional)",
           prefixIcon: Icon(
             widget.icon,

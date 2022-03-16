@@ -270,7 +270,8 @@ class _SignUpState extends State<SignUp> {
                         initialValue: _selectedDate,
                         firstDate: DateTime(1930),
                         lastDate: DateTime(2023),
-                        dateLabelText: "Birth date",
+                        dateLabelText: "Date",
+                        fieldLabelText: "Date",
                         textAlign: TextAlign.start,
                         style: const TextStyle(
                             color: Colors.white,
@@ -282,6 +283,8 @@ class _SignUpState extends State<SignUp> {
                               .requestFocus(_focusStreetAddress1);
                         },
                         decoration: InputDecoration(
+                            hintText: "Birth Date",
+                            hintStyle: kTextHintStyle,
                             prefixIcon: const Icon(Icons.date_range_outlined,
                                 color: Colors.black, size: 35),
                             helperText: "Required*",

@@ -10,6 +10,13 @@ const kTextFieldStyle = TextStyle(
     letterSpacing: 2,
     fontWeight: FontWeight.w500);
 
+const kTextHintStyle = TextStyle(
+    color: Color.fromARGB(255, 196, 194, 194),
+    fontFamily: 'Montserrat',
+    fontSize: 20,
+    letterSpacing: 1,
+    fontWeight: FontWeight.w500);
+
 const kNotRequiredHintStyle = TextStyle(
     color: Color.fromARGB(255, 168, 168, 168),
     fontFamily: 'Montserrat',
