@@ -71,8 +71,6 @@ class _SignUpState extends State<SignUp> {
   bool _isValidState = false;
   bool _isValidZip = false;
 
-  bool _resetHints = false;
-
   bool _isFormValid() {
     if (!_isValidFirstName) return false;
     if (!_isValidLastName) return false;
