@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sign_up/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -216,7 +215,7 @@ class _SignUpState extends State<SignUp> {
                 image: AssetImage('assets/bg.png'), fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: Container(
+          body: SizedBox(
             width: size.width,
             height: size.height,
             child: Padding(
