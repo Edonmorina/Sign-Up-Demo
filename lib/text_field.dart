@@ -63,18 +63,8 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
         obscureText: widget.obscureText,
         textInputAction:
             widget.textInputDone ? TextInputAction.done : TextInputAction.next,
-        onFieldSubmitted: (value) {
+        onEditingComplete: () {
           FocusScope.of(context).requestFocus(widget.requestNextFocus);
-          if (value.trim() != "" || value.isNotEmpty) {
-            setState(() {
-              _isFieldValid = true;
-            });
-          }
-          if (value.trim() == "" || value.isEmpty) {
-            setState(() {
-              _isFieldValid = false;
-            });
-          }
         },
         focusNode: widget.thisFocusNode,
         autofocus: widget.autoFocus,

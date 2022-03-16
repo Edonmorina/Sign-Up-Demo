@@ -26,15 +26,15 @@ class _SignUpState extends State<SignUp> {
     super.initState();
   }
 
-  late FocusNode _focusFirstName;
-  late FocusNode _focusLastName;
-  late FocusNode _focusDatePicker;
-  late FocusNode _focusStreetAddress1;
-  late FocusNode _focusStreetAddress2;
-  late FocusNode _focusCity;
-  late FocusNode _focusState;
-  late FocusNode _focusZip;
-  late FocusNode _focusScreen;
+  late final FocusNode _focusFirstName;
+  late final FocusNode _focusLastName;
+  late final FocusNode _focusDatePicker;
+  late final FocusNode _focusStreetAddress1;
+  late final FocusNode _focusStreetAddress2;
+  late final FocusNode _focusCity;
+  late final FocusNode _focusState;
+  late final FocusNode _focusZip;
+  late final FocusNode _focusScreen;
 
   final GlobalKey _firstNameKey = GlobalKey();
   final GlobalKey _lastNameKey = GlobalKey();
@@ -171,26 +171,35 @@ class _SignUpState extends State<SignUp> {
 
     void _redirectScopeIfFieldIsInvalidOnSubmission() {
       if (!_isValidFirstName) {
-        Scrollable.ensureVisible(_firstNameKey.currentContext ?? context);
+        Scrollable.ensureVisible(
+          _firstNameKey.currentContext ?? context,
+          duration: const Duration(milliseconds: 750),
+        );
         FocusScope.of(context).requestFocus(_focusFirstName);
       } else if (!_isValidLastName) {
-        Scrollable.ensureVisible(_lastNameKey.currentContext ?? context);
+        Scrollable.ensureVisible(_lastNameKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusLastName);
       } else if (!_isValidDate) {
-        Scrollable.ensureVisible(_dateKey.currentContext ?? context);
+        Scrollable.ensureVisible(_dateKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusDatePicker);
       } else if (!_isValidFirstStreetAddress) {
         Scrollable.ensureVisible(
-            _firstStreetAddressKey.currentContext ?? context);
+            _firstStreetAddressKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusStreetAddress1);
       } else if (!_isValidCity) {
-        Scrollable.ensureVisible(_cityKey.currentContext ?? context);
+        Scrollable.ensureVisible(_cityKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusCity);
       } else if (!_isValidState) {
-        Scrollable.ensureVisible(_stateKey.currentContext ?? context);
+        Scrollable.ensureVisible(_stateKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusState);
       } else if (!_isValidZip) {
-        Scrollable.ensureVisible(_zipKey.currentContext ?? context);
+        Scrollable.ensureVisible(_zipKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusZip);
       }
     }
@@ -199,160 +208,176 @@ class _SignUpState extends State<SignUp> {
       onTap: () {
         FocusScope.of(context).requestFocus(_focusScreen);
       },
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.only(top: size.height / 20),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 50),
-                  child: const Text(
-                    "Sign Up",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 45,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 5,
+      child: Container(
+        width: size.width,
+        height: size.height,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/bg.png'), fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            width: size.width,
+            height: size.height,
+            child: Padding(
+              padding: EdgeInsets.only(top: size.height / 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 50),
+                      child: const Text(
+                        "Sign Up",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 45,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 5,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                SignUpTextFields(
-                  key: _firstNameKey,
-                  fieldController: _firstName,
-                  keyboardType: TextInputType.name,
-                  obscureText: false,
-                  hintText: _firstNamHintText,
-                  isRequired: true,
-                  icon: const Icon(Icons.person),
-                  thisFocusNode: _focusFirstName,
-                  requestNextFocus: _focusLastName,
-                  autoFocus: true,
-                ),
-                SignUpTextFields(
-                  key: _lastNameKey,
-                  fieldController: _lastName,
-                  keyboardType: TextInputType.name,
-                  obscureText: false,
-                  hintText: _lastNamHintText,
-                  isRequired: true,
-                  icon: const Icon(Icons.person_outline_rounded),
-                  thisFocusNode: _focusLastName,
-                  requestNextFocus: _focusDatePicker,
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
-                  padding: EdgeInsets.symmetric(horizontal: size.width / 12),
-                  child: DateTimePicker(
-                    key: _dateKey,
-                    initialValue: _selectedDate,
-                    firstDate: DateTime(1930),
-                    lastDate: DateTime(2023),
-                    dateLabelText: "Birth date",
-                    textAlign: TextAlign.start,
-                    onFieldSubmitted: (value) {
-                      FocusScope.of(context).requestFocus(_focusStreetAddress1);
-                    },
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.date_range_outlined),
-                        helperText: "Required*",
-                        helperStyle: _isValidDate
-                            ? TextStyle(color: Colors.green[700])
-                            : const TextStyle(color: Colors.red)),
-                    onChanged: (val) => {
-                      _selectedDate = val,
-                      if (val.isNotEmpty && val != "")
-                        {_isValidDate = true}
-                      else if (val.isEmpty || val == "")
-                        {_isValidDate = false}
-                    },
-                  ),
-                ),
-                SignUpTextFields(
-                  key: _firstStreetAddressKey,
-                  fieldController: _firstStreetAddress,
-                  keyboardType: TextInputType.streetAddress,
-                  obscureText: false,
-                  hintText: _firstStreetAddresHintText,
-                  isRequired: true,
-                  icon: const Icon(Icons.house_outlined),
-                  thisFocusNode: _focusStreetAddress1,
-                  requestNextFocus: _focusStreetAddress2,
-                ),
-                SignUpTextFields(
-                  key: _secondStreetAddressKey,
-                  fieldController: _secondStreetAddress,
-                  keyboardType: TextInputType.streetAddress,
-                  obscureText: false,
-                  hintText: _secondStreetAddresHintText,
-                  isRequired: false,
-                  icon: const Icon(Icons.house_rounded),
-                  thisFocusNode: _focusStreetAddress2,
-                  requestNextFocus: _focusCity,
-                ),
-                SignUpTextFields(
-                  key: _cityKey,
-                  fieldController: _city,
-                  keyboardType: TextInputType.text,
-                  obscureText: false,
-                  hintText: _cityHintText,
-                  isRequired: true,
-                  icon: const Icon(Icons.location_city_outlined),
-                  thisFocusNode: _focusCity,
-                  requestNextFocus: _focusState,
-                ),
-                SignUpTextFields(
-                  key: _stateKey,
-                  fieldController: _state,
-                  keyboardType: TextInputType.text,
-                  obscureText: false,
-                  hintText: _stateHintText,
-                  isRequired: true,
-                  icon: const Icon(Icons.location_on_outlined),
-                  thisFocusNode: _focusState,
-                  requestNextFocus: _focusZip,
-                ),
-                SignUpTextFields(
-                  key: _zipKey,
-                  fieldController: _zip,
-                  keyboardType: TextInputType.text,
-                  obscureText: false,
-                  hintText: _zipHintText,
-                  isRequired: true,
-                  icon: const Icon(Icons.local_post_office_outlined),
-                  textInputDone: true,
-                  thisFocusNode: _focusZip,
-                  requestNextFocus: null,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.width / 5),
-                  child: SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          _changeValidationStateIfInputIsEmpty();
-
-                          if (_isFormValid()) {
-                            _addUser();
-                            _clearTextFieldsAndResetValidation();
-                          } else {
-                            _redirectScopeIfFieldIsInvalidOnSubmission();
-                          }
+                    SignUpTextFields(
+                      key: _firstNameKey,
+                      fieldController: _firstName,
+                      keyboardType: TextInputType.name,
+                      obscureText: false,
+                      hintText: _firstNamHintText,
+                      isRequired: true,
+                      icon: const Icon(Icons.person),
+                      thisFocusNode: _focusFirstName,
+                      requestNextFocus: _focusLastName,
+                      autoFocus: true,
+                    ),
+                    SignUpTextFields(
+                      key: _lastNameKey,
+                      fieldController: _lastName,
+                      keyboardType: TextInputType.name,
+                      obscureText: false,
+                      hintText: _lastNamHintText,
+                      isRequired: true,
+                      icon: const Icon(Icons.person_outline_rounded),
+                      thisFocusNode: _focusLastName,
+                      requestNextFocus: _focusDatePicker,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width / 12),
+                      child: DateTimePicker(
+                        key: _dateKey,
+                        initialValue: _selectedDate,
+                        firstDate: DateTime(1930),
+                        lastDate: DateTime(2023),
+                        dateLabelText: "Birth date",
+                        textAlign: TextAlign.start,
+                        onFieldSubmitted: (value) {
+                          FocusScope.of(context)
+                              .requestFocus(_focusStreetAddress1);
                         },
-                        child: const Text("Sign Up"),
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.black))),
-                  ),
+                        decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.date_range_outlined),
+                            helperText: "Required*",
+                            helperStyle: _isValidDate
+                                ? TextStyle(color: Colors.green[700])
+                                : const TextStyle(color: Colors.red)),
+                        onChanged: (val) => {
+                          _selectedDate = val,
+                          if (val.isNotEmpty && val != "")
+                            {_isValidDate = true}
+                          else if (val.isEmpty || val == "")
+                            {_isValidDate = false}
+                        },
+                      ),
+                    ),
+                    SignUpTextFields(
+                      key: _firstStreetAddressKey,
+                      fieldController: _firstStreetAddress,
+                      keyboardType: TextInputType.streetAddress,
+                      obscureText: false,
+                      hintText: _firstStreetAddresHintText,
+                      isRequired: true,
+                      icon: const Icon(Icons.house_outlined),
+                      thisFocusNode: _focusStreetAddress1,
+                      requestNextFocus: _focusStreetAddress2,
+                    ),
+                    SignUpTextFields(
+                      key: _secondStreetAddressKey,
+                      fieldController: _secondStreetAddress,
+                      keyboardType: TextInputType.streetAddress,
+                      obscureText: false,
+                      hintText: _secondStreetAddresHintText,
+                      isRequired: false,
+                      icon: const Icon(Icons.house_rounded),
+                      thisFocusNode: _focusStreetAddress2,
+                      requestNextFocus: _focusCity,
+                    ),
+                    SignUpTextFields(
+                      key: _cityKey,
+                      fieldController: _city,
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      hintText: _cityHintText,
+                      isRequired: true,
+                      icon: const Icon(Icons.location_city_outlined),
+                      thisFocusNode: _focusCity,
+                      requestNextFocus: _focusState,
+                    ),
+                    SignUpTextFields(
+                      key: _stateKey,
+                      fieldController: _state,
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      hintText: _stateHintText,
+                      isRequired: true,
+                      icon: const Icon(Icons.location_on_outlined),
+                      thisFocusNode: _focusState,
+                      requestNextFocus: _focusZip,
+                    ),
+                    SignUpTextFields(
+                      key: _zipKey,
+                      fieldController: _zip,
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      hintText: _zipHintText,
+                      isRequired: true,
+                      icon: const Icon(Icons.local_post_office_outlined),
+                      textInputDone: true,
+                      thisFocusNode: _focusZip,
+                      requestNextFocus: _focusScreen,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: size.width / 5),
+                      child: SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              _changeValidationStateIfInputIsEmpty();
+
+                              if (_isFormValid()) {
+                                _addUser();
+                                _clearTextFieldsAndResetValidation();
+                              } else {
+                                _redirectScopeIfFieldIsInvalidOnSubmission();
+                              }
+                            },
+                            child: const Text("Sign Up"),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black))),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 185,
+                    )
+                  ],
                 ),
-                const SizedBox(
-                  height: 185,
-                )
-              ],
+              ),
             ),
           ),
         ),
