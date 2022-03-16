@@ -10,39 +10,62 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool _validateFirstName = false;
-  bool _validateLastName = false;
-  bool _validateFirstStreetAdress = false;
-  bool _validateCity = false;
-  bool _validateState = false;
-  bool _validateZip = false;
-
-  bool isFormValid() {
-    if (_validateFirstName &&
-        _validateLastName &&
-        _validateFirstStreetAdress &&
-        _validateCity &&
-        _validateState &&
-        _validateZip) {
-      return true;
-    }
-    return false;
-  }
-
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
-  final TextEditingController _firstStreetAdress = TextEditingController();
-  final TextEditingController _secondStreetAdress = TextEditingController();
+  final TextEditingController _firstStreetAddress = TextEditingController();
+  final TextEditingController _secondStreetAddress = TextEditingController();
   final TextEditingController _city = TextEditingController();
   final TextEditingController _state = TextEditingController();
   final TextEditingController _zip = TextEditingController();
+
+  final String _firstNameLabelText = "First Name";
+  final String _lastNameLabelText = "Last Name";
+  final String _firstStreetAddressLabelText = "Street Address 1";
+  final String _secondStreetAddressLabelText = "Street Address 2";
+  final String _stateLabelText = "State";
+  final String _cityLabelText = "City";
+  final String _zipLabelText = "Zip";
+
+  bool _isValidFirstName = false;
+  bool _isValidLastName = false;
+  bool _isValidFirstStreetAddress = false;
+  bool _isValidCity = false;
+  bool _isValidState = false;
+  bool _isValidZip = false;
+
+  bool _isFormValid() {
+    if (!_isValidFirstName) return false;
+    if (!_isValidLastName) return false;
+    if (!_isValidFirstStreetAddress) return false;
+    if (!_isValidCity) return false;
+    if (!_isValidState) return false;
+    if (!_isValidZip) return false;
+    return true;
+  }
+
+  void _changeValidationStateIfInputIsEmpty() {
+    setState(() {
+      _firstName.text.isEmpty
+          ? _isValidFirstName = false
+          : _isValidFirstName = true;
+      _lastName.text.isEmpty
+          ? _isValidLastName = false
+          : _isValidLastName = true;
+      _firstStreetAddress.text.isEmpty
+          ? _isValidFirstStreetAddress = false
+          : _isValidFirstStreetAddress = true;
+      _city.text.isEmpty ? _isValidCity = false : _isValidCity = true;
+      _state.text.isEmpty ? _isValidState = false : _isValidState = true;
+      _zip.text.isEmpty ? _isValidZip = false : _isValidZip = true;
+    });
+  }
 
   @override
   void dispose() {
     _firstName.dispose();
     _lastName.dispose();
-    _firstStreetAdress.dispose();
-    _secondStreetAdress.dispose();
+    _firstStreetAddress.dispose();
+    _secondStreetAddress.dispose();
     _city.dispose();
     _state.dispose();
     _zip.dispose();
@@ -61,105 +84,100 @@ class _SignUpState extends State<SignUp> {
         resizeToAvoidBottomInset: false,
         body: Container(
           width: size.width,
-          height: size.height,
           color: Colors.blue[50],
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width / 14),
-            child: Stack(
+            padding: EdgeInsets.only(top: size.height / 20),
+            child: ListView(
               children: [
-                Align(
-                  alignment: const Alignment(0, -0.75),
-                  child: SignUpTextFields(
-                      fieldController: _firstName,
-                      keyboardType: TextInputType.name,
-                      obscureText: false,
-                      labelText: "First Name"),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 25),
+                  child: const Text(
+                    "Sign Up",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.green, fontSize: 45),
+                  ),
                 ),
-                Align(
-                  alignment: const Alignment(0, -0.55),
-                  child: SignUpTextFields(
-                      fieldController: _lastName,
-                      keyboardType: TextInputType.name,
-                      obscureText: false,
-                      labelText: "Last Name"),
+                SignUpTextFields(
+                  key: Key(_firstNameLabelText),
+                  fieldController: _firstName,
+                  keyboardType: TextInputType.name,
+                  obscureText: false,
+                  labelText: _firstNameLabelText,
+                  isRequired: true,
+                  icon: const Icon(Icons.person),
                 ),
-                Align(
-                  alignment: const Alignment(0, -0.35),
-                  child: SignUpTextFields(
-                      fieldController: _firstStreetAdress,
-                      keyboardType: TextInputType.streetAddress,
-                      obscureText: false,
-                      labelText: "Street Address 1"),
+                SignUpTextFields(
+                  key: Key(_lastNameLabelText),
+                  fieldController: _lastName,
+                  keyboardType: TextInputType.name,
+                  obscureText: false,
+                  labelText: _lastNameLabelText,
+                  isRequired: true,
+                  icon: const Icon(Icons.person_outline_rounded),
                 ),
-                Align(
-                  alignment: const Alignment(0, -0.15),
-                  child: SignUpTextFields(
-                      fieldController: _secondStreetAdress,
-                      keyboardType: TextInputType.streetAddress,
-                      obscureText: false,
-                      labelText: "Street Address 2"),
+                SignUpTextFields(
+                  fieldController: _firstStreetAddress,
+                  keyboardType: TextInputType.streetAddress,
+                  obscureText: false,
+                  labelText: _firstStreetAddressLabelText,
+                  isRequired: true,
+                  icon: const Icon(Icons.house_outlined),
                 ),
-                Align(
-                  alignment: const Alignment(0, 0.05),
-                  child: SignUpTextFields(
-                      fieldController: _state,
-                      keyboardType: TextInputType.text,
-                      obscureText: false,
-                      labelText: "State"),
+                SignUpTextFields(
+                    fieldController: _secondStreetAddress,
+                    keyboardType: TextInputType.streetAddress,
+                    obscureText: false,
+                    labelText: _secondStreetAddressLabelText,
+                    isRequired: false,
+                    icon: const Icon(Icons.house_rounded)),
+                SignUpTextFields(
+                    fieldController: _city,
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    labelText: _cityLabelText,
+                    isRequired: true,
+                    icon: const Icon(Icons.location_city_outlined)),
+                SignUpTextFields(
+                    fieldController: _state,
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    labelText: _stateLabelText,
+                    isRequired: true,
+                    icon: const Icon(Icons.location_on_outlined)),
+                SignUpTextFields(
+                    fieldController: _zip,
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    labelText: _zipLabelText,
+                    isRequired: true,
+                    icon: const Icon(Icons.local_post_office_outlined)),
+                const SizedBox(
+                  height: 15,
                 ),
-                Align(
-                  alignment: const Alignment(0, 0.25),
-                  child: SignUpTextFields(
-                      fieldController: _city,
-                      keyboardType: TextInputType.text,
-                      obscureText: false,
-                      labelText: "City"),
-                ),
-                Align(
-                  alignment: const Alignment(0, 0.45),
-                  child: SignUpTextFields(
-                      fieldController: _zip,
-                      keyboardType: TextInputType.text,
-                      obscureText: false,
-                      labelText: "Zip"),
-                ),
-                Align(
-                  alignment: const Alignment(0, 0.75),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _firstName.text.isEmpty
-                              ? _validateFirstName = true
-                              : _validateFirstName = false;
-                          _lastName.text.isEmpty
-                              ? _validateLastName = true
-                              : _validateLastName = false;
-                          _firstStreetAdress.text.isEmpty
-                              ? _validateFirstStreetAdress = true
-                              : _validateFirstStreetAdress = false;
-                          _city.text.isEmpty
-                              ? _validateCity = true
-                              : _validateCity = false;
-                          _state.text.isEmpty
-                              ? _validateState = true
-                              : _validateState = false;
-                          _zip.text.isEmpty
-                              ? _validateZip = true
-                              : _validateZip = false;
-                        });
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width / 5),
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _changeValidationStateIfInputIsEmpty();
 
-                        if (isFormValid()) {
-                          // ignore: avoid_print
-                          print("Form is valid");
-                        } else {
-                          // ignore: avoid_print
-                          print("Form not valid");
-                        }
-                      },
-                      child: const Text("Submit"),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue))),
+                          if (_isFormValid()) {
+                            // ignore: avoid_print
+                            print("Form is valid");
+                          } else {
+                            // ignore: avoid_print
+                            print("Form not valid");
+                          }
+                        },
+                        child: const Text("Sign Up"),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.blue))),
+                  ),
+                ),
+                const SizedBox(
+                  height: 185,
                 )
               ],
             ),
