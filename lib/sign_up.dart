@@ -71,6 +71,8 @@ class _SignUpState extends State<SignUp> {
   bool _isValidState = false;
   bool _isValidZip = false;
 
+  bool _resetHints = false;
+
   bool _isFormValid() {
     if (!_isValidFirstName) return false;
     if (!_isValidLastName) return false;
@@ -288,6 +290,12 @@ class _SignUpState extends State<SignUp> {
                             prefixIcon: const Icon(Icons.date_range_outlined,
                                 color: Colors.black, size: 35),
                             helperText: "Required*",
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: _isValidDate
+                                        ? kValidColor
+                                        : kNotValidColor,
+                                    width: 2)),
                             helperStyle: _isValidDate
                                 ? kRequiredValidHintStyle
                                 : kRequiredNotValidHintStyle),

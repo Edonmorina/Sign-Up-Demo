@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const kNotValidColor = Color.fromARGB(255, 185, 41, 36);
 const kValidColor = Color.fromARGB(255, 6, 199, 102);
+const kNotRequiredHintColor = Color.fromARGB(255, 168, 168, 168);
 
 const kTextFieldStyle = TextStyle(
     color: Colors.white,

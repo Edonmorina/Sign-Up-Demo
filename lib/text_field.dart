@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import './constants.dart';
 
 class SignUpTextFields extends StatefulWidget {
-  const SignUpTextFields(
-      {Key? key,
-      required this.fieldController,
-      required this.keyboardType,
-      required this.obscureText,
-      required this.hintText,
-      required this.isRequired,
-      required this.icon,
-      this.textInputDone = false,
-      this.autoFocus = false,
-      required this.thisFocusNode,
-      required this.requestNextFocus})
-      : super(key: key);
+  const SignUpTextFields({
+    Key? key,
+    required this.fieldController,
+    required this.keyboardType,
+    required this.obscureText,
+    required this.hintText,
+    required this.isRequired,
+    required this.icon,
+    this.textInputDone = false,
+    this.autoFocus = false,
+    required this.thisFocusNode,
+    required this.requestNextFocus,
+  }) : super(key: key);
 
   final TextEditingController fieldController;
   final TextInputType keyboardType;
@@ -69,6 +69,14 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
         textAlignVertical: const TextAlignVertical(y: -0.25),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(0),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: !widget.isRequired
+                      ? kNotRequiredHintColor
+                      : _isFieldValid
+                          ? kValidColor
+                          : kNotValidColor,
+                  width: 2)),
           hintText: widget.hintText,
           fillColor: Colors.white,
           hintStyle: kTextHintStyle,
