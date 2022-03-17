@@ -40,7 +40,7 @@ Connect an Android Phone or use an emulator and execute the following command:
 
 <img src= "https://user-images.githubusercontent.com/74024519/158720704-3578ad3a-f1cd-4e1b-9964-09f4008bff3a.jpg" alt="screen" width = "350">
 
-[![video](https://i9.ytimg.com/vi/nAz-iPW5JXo/mq1.jpg?sqp=CPSpypEG&rs=AOn4CLDj9fLHlyKhFk-DIQHgQla4Rp45Gg)](https://www.youtube.com/watch?v=nAz-iPW5JXo){:target="_blank"}
+[![video](https://i9.ytimg.com/vi/nAz-iPW5JXo/mq1.jpg?sqp=CPSpypEG&rs=AOn4CLDj9fLHlyKhFk-DIQHgQla4Rp45Gg)](https://www.youtube.com/watch?v=nAz-iPW5JXo)
 
 ### Data in Firestore
 
