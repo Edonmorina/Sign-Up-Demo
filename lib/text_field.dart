@@ -49,7 +49,10 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
               _isFieldValid = true;
             });
           }
-          if (value.trim() == "" || value.isEmpty) {
+          if (value.trim() == "" ||
+              value.isEmpty ||
+              value.trim().isEmpty ||
+              value.length <= 1) {
             setState(() {
               _isFieldValid = false;
             });

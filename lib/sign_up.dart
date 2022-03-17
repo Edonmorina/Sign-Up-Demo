@@ -71,6 +71,8 @@ class _SignUpState extends State<SignUp> {
   bool _isValidState = false;
   bool _isValidZip = false;
 
+  bool _dataIsGettingSend = false;
+
   bool _isFormValid() {
     if (!_isValidFirstName) return false;
     if (!_isValidLastName) return false;
@@ -134,9 +136,9 @@ class _SignUpState extends State<SignUp> {
     Size size = MediaQuery.of(context).size;
     CollectionReference users = FirebaseFirestore.instance.collection("users");
 
-    void _addUser() {
+    Future<DocumentReference<Object?>> _addUser() {
       // Add Users to [Firestore] (Firebase database)
-      users.add({
+      return users.add({
         'firstName': _firstName.text,
         'lastName': _lastName.text,
         'birthDate': _selectedDate,
@@ -150,14 +152,16 @@ class _SignUpState extends State<SignUp> {
 
     void _clearTextFieldsAndResetValidation() {
       setState(() {
-        _firstName.text = "";
-        _lastName.text = "";
-        _selectedDate = "";
-        _firstStreetAddress.text = "";
-        _secondStreetAddress.text = "";
-        _city.text = "";
-        _state.text = "";
-        _zip.text = "";
+        setState(() {
+          _firstName.text = "";
+          _lastName.text = "";
+          _selectedDate = "";
+          _firstStreetAddress.text = "";
+          _secondStreetAddress.text = "";
+          _city.text = "";
+          _state.text = "";
+          _zip.text = "";
+        });
 
         _isValidFirstName = false;
         _isValidLastName = false;
@@ -371,17 +375,29 @@ class _SignUpState extends State<SignUp> {
                         height: 55,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             _changeValidationStateIfInputIsEmpty();
 
                             if (_isFormValid()) {
-                              _addUser();
+                              setState(() {
+                                _dataIsGettingSend = true;
+                              });
+                              await _addUser();
                               _clearTextFieldsAndResetValidation();
                             } else {
                               _redirectScopeIfFieldIsInvalidOnSubmission();
                             }
+
+                            setState(() {
+                              _dataIsGettingSend = false;
+                            });
                           },
-                          child: const Text("Sign Up"),
+                          child: _dataIsGettingSend
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3.5,
+                                )
+                              : const Text("Sign Up"),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                               const Color.fromARGB(255, 0, 0, 0),
