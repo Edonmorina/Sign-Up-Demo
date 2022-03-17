@@ -34,3 +34,14 @@ Go to project root and execute the following command in console to get the requi
 Connect an Android Phone or use an emulator and execute the following command:
 
 ``` flutter run ```
+
+
+### How it looks and a short demo
+
+<img src= "https://user-images.githubusercontent.com/74024519/158720704-3578ad3a-f1cd-4e1b-9964-09f4008bff3a.jpg" alt="screen" width = "350">
+
+[![video](https://i9.ytimg.com/vi/nAz-iPW5JXo/mq1.jpg?sqp=CPSpypEG&rs=AOn4CLDj9fLHlyKhFk-DIQHgQla4Rp45Gg)](https://www.youtube.com/watch?v=nAz-iPW5JXo)
+
+### Data in Firestore
+
+<img src= "https://user-images.githubusercontent.com/74024519/158721496-ce61dbfc-0739-473a-9b8a-71a2bc35f1a2.PNG" alt="firestore" width = "833">
