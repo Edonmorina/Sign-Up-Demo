@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import './constants.dart';
 
 class SignUpTextFields extends StatefulWidget {
-  const SignUpTextFields({
-    Key? key,
-    required this.fieldController,
-    required this.keyboardType,
-    required this.obscureText,
-    required this.hintText,
-    required this.isRequired,
-    required this.icon,
-    this.textInputDone = false,
-    this.autoFocus = false,
-    required this.thisFocusNode,
-    required this.requestNextFocus,
-  }) : super(key: key);
+  const SignUpTextFields(
+      {Key? key,
+      required this.fieldController,
+      required this.keyboardType,
+      required this.obscureText,
+      required this.hintText,
+      required this.isRequired,
+      required this.icon,
+      this.textInputDone = false,
+      this.autoFocus = false,
+      required this.thisFocusNode,
+      required this.requestNextFocus,
+      required this.fieldStateListener,
+      required this.isItValid})
+      : super(key: key);
 
   final TextEditingController fieldController;
   final TextInputType keyboardType;
@@ -26,14 +28,14 @@ class SignUpTextFields extends StatefulWidget {
   final FocusNode thisFocusNode;
   final FocusNode? requestNextFocus;
   final bool autoFocus;
+  final bool? fieldStateListener;
+  final void Function(bool) isItValid;
 
   @override
   State<SignUpTextFields> createState() => _SignUpTextFieldsState();
 }
 
 class _SignUpTextFieldsState extends State<SignUpTextFields> {
-  bool _isFieldValid = false;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,17 +47,13 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
         controller: widget.fieldController,
         onChanged: (value) {
           if (value.trim() != "" || value.isNotEmpty) {
-            setState(() {
-              _isFieldValid = true;
-            });
+            widget.isItValid(true);
           }
           if (value.trim() == "" ||
               value.isEmpty ||
               value.trim().isEmpty ||
               value.length <= 1) {
-            setState(() {
-              _isFieldValid = false;
-            });
+            widget.isItValid(false);
           }
         },
         textAlign: TextAlign.start,
@@ -76,7 +74,7 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
               borderSide: BorderSide(
                   color: !widget.isRequired
                       ? kNotRequiredHintColor
-                      : _isFieldValid
+                      : widget.fieldStateListener ?? false
                           ? kValidColor
                           : kNotValidColor,
                   width: 2)),
@@ -92,7 +90,7 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
           prefixIconConstraints: const BoxConstraints(minWidth: 50),
           helperStyle: !widget.isRequired
               ? kNotRequiredHintStyle
-              : _isFieldValid
+              : widget.fieldStateListener ?? false
                   ? kRequiredValidHintStyle
                   : kRequiredNotValidHintStyle,
         ),

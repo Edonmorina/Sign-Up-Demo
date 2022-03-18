@@ -3,6 +3,8 @@ import 'package:sign_up/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'constants.dart';
+import 'package:provider/provider.dart';
+import 'package:sign_up/providers/sign_up_text_field_states.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -63,43 +65,7 @@ class _SignUpState extends State<SignUp> {
 
   String _selectedDate = "";
 
-  bool _isValidFirstName = false;
-  bool _isValidLastName = false;
-  bool _isValidDate = false;
-  bool _isValidFirstStreetAddress = false;
-  bool _isValidCity = false;
-  bool _isValidState = false;
-  bool _isValidZip = false;
-
   bool _dataIsGettingSend = false;
-
-  bool _isFormValid() {
-    if (!_isValidFirstName) return false;
-    if (!_isValidLastName) return false;
-    if (!_isValidDate) return false;
-    if (!_isValidFirstStreetAddress) return false;
-    if (!_isValidCity) return false;
-    if (!_isValidState) return false;
-    if (!_isValidZip) return false;
-    return true;
-  }
-
-  void _changeValidationStateIfInputIsEmpty() {
-    setState(() {
-      _firstName.text.isEmpty
-          ? _isValidFirstName = false
-          : _isValidFirstName = true;
-      _lastName.text.isEmpty
-          ? _isValidLastName = false
-          : _isValidLastName = true;
-      _firstStreetAddress.text.isEmpty
-          ? _isValidFirstStreetAddress = false
-          : _isValidFirstStreetAddress = true;
-      _city.text.isEmpty ? _isValidCity = false : _isValidCity = true;
-      _state.text.isEmpty ? _isValidState = false : _isValidState = true;
-      _zip.text.isEmpty ? _isValidZip = false : _isValidZip = true;
-    });
-  }
 
   // Dispose Functions
   void _disposeTextEditingControllers() {
@@ -150,35 +116,71 @@ class _SignUpState extends State<SignUp> {
       });
     }
 
+    bool _isValidFirstName =
+        context.watch<SignUpTextFieldStates>().isFirstNameValid;
+    bool _isValidLastName =
+        context.watch<SignUpTextFieldStates>().isLastNameValid;
+    bool _isValidDate = context.watch<SignUpTextFieldStates>().isDateValid;
+    bool _isValidFirstStreetAddress =
+        context.watch<SignUpTextFieldStates>().isFirstStreetAddressValid;
+    bool _isValidCity = context.watch<SignUpTextFieldStates>().isCityValid;
+    bool _isValidState = context.watch<SignUpTextFieldStates>().isStateValid;
+    bool _isValidZip = context.watch<SignUpTextFieldStates>().isZipValid;
+
+    bool _isFormValid() {
+      if (!_isValidFirstName) return false;
+      if (!_isValidLastName) return false;
+      if (!_isValidDate) return false;
+      if (!_isValidFirstStreetAddress) return false;
+      if (!_isValidCity) return false;
+      if (!_isValidState) return false;
+      if (!_isValidZip) return false;
+      return true;
+    }
+
+    void _changeValidationStateIfInputIsEmpty() {
+      _firstName.text.length <= 1
+          ? context.read<SignUpTextFieldStates>().setIsFirstNameValidTo(false)
+          : context.read<SignUpTextFieldStates>().setIsFirstNameValidTo(true);
+      _lastName.text.length <= 1
+          ? context.read<SignUpTextFieldStates>().setIsLastNameValidTo(false)
+          : context.read<SignUpTextFieldStates>().setIsLastNameValidTo(true);
+      _firstStreetAddress.text.length <= 1
+          ? context
+              .read<SignUpTextFieldStates>()
+              .setIsFirstStreetAddressValidTo(false)
+          : context
+              .read<SignUpTextFieldStates>()
+              .setIsFirstStreetAddressValidTo(true);
+      _city.text.length <= 1
+          ? context.read<SignUpTextFieldStates>().setIsCityValid(false)
+          : context.read<SignUpTextFieldStates>().setIsCityValid(true);
+      _state.text.length <= 1
+          ? context.read<SignUpTextFieldStates>().setIsStateValid(false)
+          : context.read<SignUpTextFieldStates>().setIsStateValid(true);
+      _zip.text.length <= 1
+          ? context.read<SignUpTextFieldStates>().setIsZipValid(false)
+          : context.read<SignUpTextFieldStates>().setIsZipValid(true);
+    }
+
     void _clearTextFieldsAndResetValidation() {
       setState(() {
-        setState(() {
-          _firstName.text = "";
-          _lastName.text = "";
-          _selectedDate = "";
-          _firstStreetAddress.text = "";
-          _secondStreetAddress.text = "";
-          _city.text = "";
-          _state.text = "";
-          _zip.text = "";
-        });
-
-        _isValidFirstName = false;
-        _isValidLastName = false;
-        _isValidDate = false;
-        _isValidFirstStreetAddress = false;
-        _isValidCity = false;
-        _isValidState = false;
-        _isValidZip = false;
+        _firstName.text = "";
+        _lastName.text = "";
+        _selectedDate = "";
+        _firstStreetAddress.text = "";
+        _secondStreetAddress.text = "";
+        _city.text = "";
+        _state.text = "";
+        _zip.text = "";
       });
+      context.read<SignUpTextFieldStates>().resetAllFields();
     }
 
     void _redirectScopeIfFieldIsInvalidOnSubmission() {
       if (!_isValidFirstName) {
-        Scrollable.ensureVisible(
-          _firstNameKey.currentContext ?? context,
-          duration: const Duration(milliseconds: 750),
-        );
+        Scrollable.ensureVisible(_firstNameKey.currentContext ?? context,
+            duration: const Duration(milliseconds: 750));
         FocusScope.of(context).requestFocus(_focusFirstName);
       } else if (!_isValidLastName) {
         Scrollable.ensureVisible(_lastNameKey.currentContext ?? context,
@@ -253,6 +255,12 @@ class _SignUpState extends State<SignUp> {
                       thisFocusNode: _focusFirstName,
                       requestNextFocus: _focusLastName,
                       autoFocus: true,
+                      fieldStateListener: _isValidFirstName,
+                      isItValid: (bool bool) => {
+                        context
+                            .read<SignUpTextFieldStates>()
+                            .setIsFirstNameValidTo(bool)
+                      },
                     ),
                     SignUpTextFields(
                       key: _lastNameKey,
@@ -264,6 +272,12 @@ class _SignUpState extends State<SignUp> {
                       icon: Icons.person,
                       thisFocusNode: _focusLastName,
                       requestNextFocus: _focusDatePicker,
+                      fieldStateListener: _isValidLastName,
+                      isItValid: (bool bool) => {
+                        context
+                            .read<SignUpTextFieldStates>()
+                            .setIsLastNameValidTo(bool)
+                      },
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 15),
@@ -304,9 +318,13 @@ class _SignUpState extends State<SignUp> {
                         onChanged: (val) => {
                           _selectedDate = val,
                           if (val.isNotEmpty && val != "")
-                            {_isValidDate = true}
+                            context
+                                .read<SignUpTextFieldStates>()
+                                .setIsDateValidTo(true)
                           else if (val.isEmpty || val == "")
-                            {_isValidDate = false}
+                            context
+                                .read<SignUpTextFieldStates>()
+                                .setIsDateValidTo(false)
                         },
                       ),
                     ),
@@ -320,6 +338,12 @@ class _SignUpState extends State<SignUp> {
                       icon: Icons.house_outlined,
                       thisFocusNode: _focusStreetAddress1,
                       requestNextFocus: _focusStreetAddress2,
+                      fieldStateListener: _isValidFirstStreetAddress,
+                      isItValid: (bool bool) => {
+                        context
+                            .read<SignUpTextFieldStates>()
+                            .setIsFirstStreetAddressValidTo(bool)
+                      },
                     ),
                     SignUpTextFields(
                       key: _secondStreetAddressKey,
@@ -331,6 +355,8 @@ class _SignUpState extends State<SignUp> {
                       icon: Icons.house_rounded,
                       thisFocusNode: _focusStreetAddress2,
                       requestNextFocus: _focusCity,
+                      fieldStateListener: null,
+                      isItValid: (bool bool) => {},
                     ),
                     SignUpTextFields(
                       key: _cityKey,
@@ -342,6 +368,12 @@ class _SignUpState extends State<SignUp> {
                       icon: Icons.location_city_outlined,
                       thisFocusNode: _focusCity,
                       requestNextFocus: _focusState,
+                      fieldStateListener: _isValidCity,
+                      isItValid: (bool bool) => {
+                        context
+                            .read<SignUpTextFieldStates>()
+                            .setIsCityValid(bool)
+                      },
                     ),
                     SignUpTextFields(
                       key: _stateKey,
@@ -353,6 +385,12 @@ class _SignUpState extends State<SignUp> {
                       icon: Icons.location_on_outlined,
                       thisFocusNode: _focusState,
                       requestNextFocus: _focusZip,
+                      fieldStateListener: _isValidState,
+                      isItValid: (bool bool) => {
+                        context
+                            .read<SignUpTextFieldStates>()
+                            .setIsStateValid(bool)
+                      },
                     ),
                     SignUpTextFields(
                       key: _zipKey,
@@ -365,6 +403,12 @@ class _SignUpState extends State<SignUp> {
                       textInputDone: true,
                       thisFocusNode: _focusZip,
                       requestNextFocus: _focusScreen,
+                      fieldStateListener: _isValidZip,
+                      isItValid: (bool bool) => {
+                        context
+                            .read<SignUpTextFieldStates>()
+                            .setIsZipValid(bool)
+                      },
                     ),
                     const SizedBox(
                       height: 15,
