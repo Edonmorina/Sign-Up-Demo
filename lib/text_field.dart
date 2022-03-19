@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './constants.dart';
 
-class SignUpTextFields extends StatefulWidget {
+class SignUpTextFields extends StatelessWidget {
   const SignUpTextFields(
       {Key? key,
       required this.fieldController,
@@ -32,11 +32,6 @@ class SignUpTextFields extends StatefulWidget {
   final void Function(bool) isItValid;
 
   @override
-  State<SignUpTextFields> createState() => _SignUpTextFieldsState();
-}
-
-class _SignUpTextFieldsState extends State<SignUpTextFields> {
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -44,53 +39,53 @@ class _SignUpTextFieldsState extends State<SignUpTextFields> {
       margin: const EdgeInsets.symmetric(vertical: 15),
       padding: EdgeInsets.symmetric(horizontal: (size.width * 7.5) / 100),
       child: TextFormField(
-        controller: widget.fieldController,
+        controller: fieldController,
         onChanged: (value) {
           if (value.trim() != "" || value.isNotEmpty) {
-            widget.isItValid(true);
+            isItValid(true);
           }
           if (value.trim() == "" ||
               value.isEmpty ||
               value.trim().isEmpty ||
               value.length <= 1) {
-            widget.isItValid(false);
+            isItValid(false);
           }
         },
         textAlign: TextAlign.start,
         style: kTextFieldStyle,
         cursorWidth: 3.0,
-        obscureText: widget.obscureText,
+        obscureText: obscureText,
         textInputAction:
-            widget.textInputDone ? TextInputAction.done : TextInputAction.next,
+            textInputDone ? TextInputAction.done : TextInputAction.next,
         onEditingComplete: () {
-          FocusScope.of(context).requestFocus(widget.requestNextFocus);
+          FocusScope.of(context).requestFocus(requestNextFocus);
         },
-        focusNode: widget.thisFocusNode,
-        autofocus: widget.autoFocus,
+        focusNode: thisFocusNode,
+        autofocus: autoFocus,
         textAlignVertical: const TextAlignVertical(y: -0.25),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(0),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                  color: !widget.isRequired
+                  color: !isRequired
                       ? kNotRequiredHintColor
-                      : widget.fieldStateListener ?? false
+                      : fieldStateListener ?? false
                           ? kValidColor
                           : kNotValidColor,
                   width: 2)),
-          hintText: widget.hintText,
+          hintText: hintText,
           fillColor: Colors.white,
           hintStyle: kTextHintStyle,
-          helperText: widget.isRequired ? "Required*" : "(Optional)",
+          helperText: isRequired ? "Required*" : "(Optional)",
           prefixIcon: Icon(
-            widget.icon,
+            icon,
             color: const Color.fromARGB(255, 0, 0, 0),
             size: 35,
           ),
           prefixIconConstraints: const BoxConstraints(minWidth: 50),
-          helperStyle: !widget.isRequired
+          helperStyle: !isRequired
               ? kNotRequiredHintStyle
-              : widget.fieldStateListener ?? false
+              : fieldStateListener ?? false
                   ? kRequiredValidHintStyle
                   : kRequiredNotValidHintStyle,
         ),
